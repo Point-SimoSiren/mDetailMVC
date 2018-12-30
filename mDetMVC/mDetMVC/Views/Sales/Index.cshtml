@@ -1,0 +1,55 @@
+﻿@model IEnumerable<mDetMVC.Models.Customers>
+
+
+@{ ViewBag.Title = "List Customers";
+}
+
+@section scripts{
+    
+    <script>
+        $(function () {
+            $(".displayOrderDataLink").click(function () {
+
+                var customerId = $(this).data("customerid");
+                //alert("klikattu" + customerId);
+                var url = "GetOrderData/" + customerId; 
+
+                $.getJSON(url, null, function (data) {  
+
+                    var id = "#orderDetailsRow-" + customerId;
+                    $(id).html(data.html);
+                    $(id).css("display", "block");
+                });
+                return false;
+            });
+        });
+    </script>
+}
+
+<h2>List Customers</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Customer Id</th>
+            <th>Company Name</th>
+            <th>Contact Person</th>
+            <th>City</th>
+            <th>Country</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (mDetMVC.Models.Customers cust in Model)
+        {
+            <tr>
+                <td><a href="#" class="displayOrderDataLink" data-customerid="@cust.CustomerID"><span class="glyphicon glyphicon-plus-sign"></span></a>@cust.CustomerID</td>
+                <td>@cust.CompanyName</td>
+                <td>@cust.ContactName</td>
+                <td>@cust.City</td>
+                <td>@cust.Country</td>
+            </tr>
+            <tr id="orderDetailsRow-@cust.CustomerID" style="display: none;"></tr>
+
+        }
+    </tbody>
+</table>
